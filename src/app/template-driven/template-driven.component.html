@@ -1,0 +1,57 @@
+<form>
+  <div>
+    <label for="name">Name:</label>
+    <input
+      type="text"
+      id="name"
+      name="name" 
+      required
+      [(ngModel)]="hero.name"
+      #name="ngModel"
+    >
+    <div [hidden]="name.valid || name.pristine">Name is required</div>
+  </div>
+
+  <div>
+    <span>Programming</span>
+    <button (click)="decrease(programming)">-</button>
+    <input
+      type="number"
+      name="programming"
+      [(ngModel)]="hero.skills.programming"
+      #programming="ngModel"
+    >
+    <button (click)="increase(programming)">+</button>
+  </div>
+
+  <div>
+    <span>BJJ</span>
+    <button (click)="decrease(bjj)">-</button>
+    <input
+      type="number"
+      name="bjj"
+      [(ngModel)]="hero.skills.bjj"
+      #bjj="ngModel"
+      disabled
+    >
+    <button (click)="increase(bjj)">+</button>
+  </div>
+
+  <div>
+    <span>FIFA</span>
+    <button (click)="decrease(fifa)">-</button>
+    <input
+      type="number"
+      name="fifa"
+      [(ngModel)]="hero.skills.fifa"
+      #fifa="ngModel"
+      disabled
+    >
+    <button (click)="increase(fifa)">+</button>
+  </div>
+
+  <button>Create</button>
+</form>
+
+
+{{ hero | json }}
