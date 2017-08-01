@@ -1,3 +1,114 @@
-<p>
-  model-driven works!
-</p>
+<form [formGroup]="heroForm">
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" formControlName="name">
+    <span *ngIf="heroForm.get('name').touched">
+      <span *ngIf="heroForm.get('name').hasError('required')">Required</span> 
+       <span *ngIf="heroForm.get('name').hasError('minlength')">Min length</span>  
+    </span>
+  </div>
+
+  <div>
+    <label for="rival">Rival:</label>
+    <select id="rival" formControlName="rival">
+      <option value="Mr. Catchup">Mr. Catchup</option>
+      <option value="PHP">PHP</option>
+      <option value="Chocolate">Chocolate</option>
+    </select>
+  </div>
+
+   <div>
+    <h1>Superpowers</h1>
+    <div formGroupName="superpowers">  
+      <label *ngFor="let power of superpowers"> 
+        <input type="checkbox" [formControlName]="power.id"> 
+        {{ power.name }}
+      </label>  
+      <div *ngIf="!heroForm.get('superpowers').pristine && heroForm.get('superpowers').hasError('atleasttwo')">
+        The hero should have at least two powers
+      </div>
+    </div>    
+  </div> 
+
+  <div>
+    <h1>Sex</h1>
+    <div>
+      <label>
+        <input type="radio" value="Male" name="sex" formControlName="sex">
+        Male
+      </label>
+    </div>
+    <div>
+      <label>
+        <input type="radio" value="Female" name="sex" formControlName="sex">
+        Female
+      </label>
+    </div>
+  </div>
+
+  <div formGroupName="skills">
+    <h1>Skills <span>{{ points }} points</span></h1>
+    <div>
+      <span>Programming</span>
+      <input type="hidden" formControlName="programming">
+      <button
+        (click)="decrease('programming')"
+        [disabled]="points === 10 || heroForm.get('skills').get('programming').value === 0">-</button>
+      <span>
+        {{ heroForm.get('skills').get('programming').value }}
+      </span>
+      <button (click)="increase('programming')" [disabled]="points === 0">+</button>
+    </div>
+    <div>
+      <span>BJJ</span>
+      <input type="hidden" formControlName="bjj">
+      <button
+        (click)="decrease('bjj')"
+        [disabled]="points === 10 || heroForm.get('skills').get('bjj').value === 0">-</button>
+      <span>
+        {{ heroForm.get('skills').get('bjj').value }}
+      </span>
+      <button (click)="increase('bjj')" [disabled]="points === 0">+</button>
+    </div>
+    <div>
+      <span>FIFA</span>
+      <input type="hidden" formControlName="fifa">
+      <button
+        (click)="decrease('fifa')"
+        [disabled]="points === 10 || heroForm.get('skills').get('fifa').value === 0">-</button>
+      <span>
+        {{ heroForm.get('skills').get('fifa').value }}
+      </span>
+      <button
+        (click)="increase('fifa')"
+        [disabled]="points === 0">+</button>
+    </div>
+  </div>
+
+  <div>
+    <label for="github">Github:</label>
+    <input type="text" formControlName="github">
+    <ul>
+      <li *ngFor="let user of users | async">
+        <img [src]="user.avatar_url">
+        {{ user.login }}
+      </li>
+    </ul>
+  </div>
+
+  <div>
+    <button [disabled]="heroForm.invalid">Create</button>
+  </div>
+
+
+</form>
+
+<pre>
+  <code>{{ heroForm.value | json }}</code>
+</pre>
+
+<ul>
+  <li *ngFor="let hero of heroes">
+    {{ hero.name }}
+  </li>
+</ul> 
