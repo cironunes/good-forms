@@ -19,11 +19,11 @@ export const state = {
         healing: false
       },
       sex: 'Male',
-      skills: [
-        { name: 'BJJ', quantity: 3 },
-        { name: 'Programming', quantity: 4 },
-        { name: 'FIFA', quantity: 3 }
-      ],
+      skills: {
+        programming: 5,
+        bjj: 3,
+        fifa: 2
+      },
       github: 'cironunes'
     }
   ]

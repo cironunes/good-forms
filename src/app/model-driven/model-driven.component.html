@@ -1,114 +1,173 @@
-<form [formGroup]="heroForm">
-  <div>
-    <label for="name">Name:</label>
-    <input type="text" id="name" formControlName="name">
-    <span *ngIf="heroForm.get('name').touched">
-      <span *ngIf="heroForm.get('name').hasError('required')">Required</span> 
-       <span *ngIf="heroForm.get('name').hasError('minlength')">Min length</span>  
-    </span>
+<form [formGroup]="heroForm" (submit)="createHero()" class="form-group form-group--big">
+  <md-input-container class="form-group form-group--big">
+    <input mdInput placeholder="Name *" formControlName="name">
+    <md-error
+      *ngIf="heroForm.get('name').touched && heroForm.get('name').pristine &&
+      heroForm.get('name').hasError('required')"
+    >
+      Name is <strong>required</strong>
+    </md-error>
+    <md-error
+      *ngIf="heroForm.get('name').touched &&
+      heroForm.get('name').hasError('minlength')"
+    >
+      The min length for the name is <strong>3</strong>
+    </md-error>
+  </md-input-container>
+
+  <md-input-container>
+    <input type="text" mdInput placeholder="Github" formControlName="github" [mdAutocomplete]="auto">
+  </md-input-container>
+  <md-autocomplete #auto="mdAutocomplete">
+    <md-option *ngFor="let user of users | async" [value]="user.login">
+      <img width="20" height="20" [src]="user.avatar_url">
+      {{ user.login }}
+    </md-option>
+  </md-autocomplete>
+
+
+  <div class="form-group form-group--big">
+    <md-select placeholder="Rival" formControlName="rival">
+      <md-option value="Mr. Catchup">Mr. Catchup</md-option>
+      <md-option value="PHP">PHP</md-option>
+      <md-option value="Chocholate">Chocolate</md-option>
+    </md-select>
   </div>
 
-  <div>
-    <label for="rival">Rival:</label>
-    <select id="rival" formControlName="rival">
-      <option value="Mr. Catchup">Mr. Catchup</option>
-      <option value="PHP">PHP</option>
-      <option value="Chocolate">Chocolate</option>
-    </select>
-  </div>
-
-   <div>
-    <h1>Superpowers</h1>
+  <div class="form-group form-group--big">
+    <h1>Superpowers *</h1>
     <div formGroupName="superpowers">  
-      <label *ngFor="let power of superpowers"> 
-        <input type="checkbox" [formControlName]="power.id"> 
+      <md-checkbox class="app-checkbox" [formControlName]="power.id" *ngFor="let power of superpowers">
         {{ power.name }}
-      </label>  
-      <div *ngIf="!heroForm.get('superpowers').pristine && heroForm.get('superpowers').hasError('atleasttwo')">
+      </md-checkbox>
+      <md-error *ngIf="!heroForm.get('superpowers').pristine && heroForm.get('superpowers').hasError('atleasttwo')">
         The hero should have at least two powers
-      </div>
+      </md-error>
     </div>    
   </div> 
 
-  <div>
+  <div class="form-group form-group--big">
     <h1>Sex</h1>
-    <div>
-      <label>
-        <input type="radio" value="Male" name="sex" formControlName="sex">
+    <md-radio-group formControlName="sex">
+      <md-radio-button value="Male">
         Male
-      </label>
-    </div>
-    <div>
-      <label>
-        <input type="radio" value="Female" name="sex" formControlName="sex">
+      </md-radio-button>
+      <md-radio-button value="Female">
         Female
-      </label>
-    </div>
+      </md-radio-button>
+    </md-radio-group>
   </div>
 
-  <div formGroupName="skills">
+  <div class="form-group form-group--big" formGroupName="skills">
     <h1>Skills <span>{{ points }} points</span></h1>
-    <div>
-      <span>Programming</span>
-      <input type="hidden" formControlName="programming">
-      <button
-        (click)="decrease('programming')"
-        [disabled]="points === 10 || heroForm.get('skills').get('programming').value === 0">-</button>
-      <span>
-        {{ heroForm.get('skills').get('programming').value }}
-      </span>
-      <button (click)="increase('programming')" [disabled]="points === 0">+</button>
-    </div>
-    <div>
-      <span>BJJ</span>
-      <input type="hidden" formControlName="bjj">
-      <button
-        (click)="decrease('bjj')"
-        [disabled]="points === 10 || heroForm.get('skills').get('bjj').value === 0">-</button>
-      <span>
-        {{ heroForm.get('skills').get('bjj').value }}
-      </span>
-      <button (click)="increase('bjj')" [disabled]="points === 0">+</button>
-    </div>
-    <div>
-      <span>FIFA</span>
-      <input type="hidden" formControlName="fifa">
-      <button
-        (click)="decrease('fifa')"
-        [disabled]="points === 10 || heroForm.get('skills').get('fifa').value === 0">-</button>
-      <span>
-        {{ heroForm.get('skills').get('fifa').value }}
-      </span>
-      <button
-        (click)="increase('fifa')"
-        [disabled]="points === 0">+</button>
-    </div>
+    <md-grid-list cols="4" rowHeight="40px">
+      <md-grid-tile>
+        <span>Programming</span>
+      </md-grid-tile>
+      <md-grid-tile>
+        <input type="hidden" formControlName="programming">
+        <button
+          type="button"
+          md-mini-fab
+          color="primary"
+          (click)="decrease('programming')"
+          [disabled]="points === 10 || heroForm.get('skills').get('programming').value === 0">-</button>
+        <span class="skill-counter">
+          {{ heroForm.get('skills').get('programming').value }}
+        </span>
+        <button
+          type="button"
+          md-mini-fab
+          color="primary"
+          (click)="increase('programming')"
+          [disabled]="points === 0">+</button>
+      </md-grid-tile>
+    </md-grid-list>
+    <md-grid-list cols="4" rowHeight="40px">
+      <md-grid-tile>
+        <span>BJJ</span>
+      </md-grid-tile>
+      <md-grid-tile>
+        <input type="hidden" formControlName="bjj">
+        <button
+          type="button"
+          md-mini-fab
+          color="primary"
+          (click)="decrease('bjj')"
+          [disabled]="points === 10 || heroForm.get('skills').get('bjj').value === 0">-</button>
+        <span class="skill-counter">
+          {{ heroForm.get('skills').get('bjj').value }}
+        </span>
+        <button
+          type="button"
+          md-mini-fab
+          color="primary"
+          (click)="increase('bjj')"
+          [disabled]="points === 0">+</button>
+      </md-grid-tile>
+    </md-grid-list>
+    <md-grid-list cols="4" rowHeight="40px">
+      <md-grid-tile>
+        <span>FIFA</span>
+      </md-grid-tile>
+      <md-grid-tile>
+        <input type="hidden" formControlName="fifa">
+        <button
+          type="button"
+          md-mini-fab
+          color="primary"
+          (click)="decrease('fifa')"
+          [disabled]="points === 10 || heroForm.get('skills').get('fifa').value === 0">-</button>
+        <span class="skill-counter">
+          {{ heroForm.get('skills').get('fifa').value }}
+        </span>
+        <button
+          type="button"
+          md-mini-fab
+          color="primary"
+          (click)="increase('fifa')"
+          [disabled]="points === 0">+</button>
+      </md-grid-tile>
+    </md-grid-list>
   </div>
 
   <div>
-    <label for="github">Github:</label>
-    <input type="text" formControlName="github">
-    <ul>
-      <li *ngFor="let user of users | async">
-        <img [src]="user.avatar_url">
-        {{ user.login }}
-      </li>
-    </ul>
+    <button md-raised-button [disabled]="heroForm.invalid">Create</button>
   </div>
-
-  <div>
-    <button [disabled]="heroForm.invalid">Create</button>
-  </div>
-
-
 </form>
 
-<pre>
-  <code>{{ heroForm.value | json }}</code>
-</pre>
-
-<ul>
-  <li *ngFor="let hero of heroes">
-    {{ hero.name }}
-  </li>
-</ul> 
+<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sex</th>
+      <th>Github</th>
+      <th>Rival</th>
+      <th>Superpowers</th>
+      <th>Skills</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let hero of heroes">
+      <td>{{ hero.name }}</td>
+      <td>{{ hero.sex }}</td>
+      <td>{{ hero.github }}</td>
+      <td>{{ hero.rival }}</td>
+      <td>
+        <span>
+          <div *ngIf="hero.superpowers.fly">Fly</div>
+          <div *ngIf="hero.superpowers.invisibility">Invisibility</div>
+          <div *ngIf="hero.superpowers.healing">Healing</div>
+          <div *ngIf="hero.superpowers.nightVision">Night vision</div>
+        </span>
+      </td>
+      <td>
+        <span>
+          <div><strong>Programming:</strong> {{ hero.skills.programming }}</div>
+          <div><strong>BJJ:</strong> {{ hero.skills.bjj }}</div>
+          <div><strong>FIFA:</strong> {{ hero.skills.fifa }}</div>
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>   

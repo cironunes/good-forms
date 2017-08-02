@@ -28,8 +28,6 @@ export const superpowersValidator = (control: AbstractControl) => {
   const fields = [invisibility, fly, healing, nightVision]
     .filter(field => field.value === true);
 
-  // debugger;
-
   if (fields.length < 2) {
     return { atleasttwo: true };
   }
@@ -101,7 +99,6 @@ export class ModelDrivenComponent {
       .debounceTime(400)
       .distinctUntilChanged()
       .switchMap(github => this.searchUsers(github));
-
   }
 
   searchUsers(q: string) {
@@ -118,6 +115,18 @@ export class ModelDrivenComponent {
   increase(field) {
     const theField = this.skills.get(field);
     this.skills.get(field).patchValue(theField.value + 1);
+  }
+
+  createHero() {
+    this.heroes.push(this.heroForm.value);
+    this.heroForm.reset({
+      name: '',
+      skills: {
+        bjj: 0,
+        fifa: 0,
+        programming: 0
+      }
+    });
   }
 
 }

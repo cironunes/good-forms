@@ -1,12 +1,18 @@
-<h1>Sweet Angular, good forms never felt so good!</h1>
+<md-toolbar color="primary">
+  <span class="app-title">Sweet Angular, good forms never felt so good!</span>
 
-<ul>
-  <li>
-    <a routerLink="/template-driven" routerLinkActive="active">Template-driven</a>
-  </li>
-  <li>
-    <a routerLink="/model-driven" routerLinkActive="active">Model-driven (reactive)</a>
-  </li>
-</ul>
+  <button
+    md-button
+    routerLink="/template-driven"
+    routerLinkActive="active"
+  >Template-driven</button>  
+
+  <button
+    md-button
+    routerLink="/model-driven"
+    routerLinkActive="active"
+  >Model-driven (reactive)</button> 
+</md-toolbar>
+
 
 <router-outlet></router-outlet>

@@ -1,57 +1,101 @@
 <form>
-  <div>
-    <label for="name">Name:</label>
+  <md-input-container class="form-group form-group--big">
     <input
+      mdInput
       type="text"
-      id="name"
       name="name" 
+      placeholder="Name"
       required
       [(ngModel)]="hero.name"
       #name="ngModel"
     >
-    <div [hidden]="name.valid || name.pristine">Name is required</div>
+    <md-error [hidden]="name.valid || name.pristine">Name is required</md-error>
+  </md-input-container>
+
+  <div class="form-group form-group--big">
+    <h1>Skills</h1>
+    <md-grid-list cols="4" rowHeight="40px">
+      <md-grid-tile>
+        <span>Programming</span>
+      </md-grid-tile>
+
+      <md-grid-tile>
+        <input
+          type="hidden"
+          name="programming"
+          [(ngModel)]="hero.skills.programming"
+          #programming="ngModel"
+        >
+        <button
+          type="button"
+          md-mini-fab
+          color="primary"
+          (click)="decrease(programming)">-</button>
+        <span class="skill-counter">{{ hero.skills.programming }}</span>
+        <button
+          type="button"
+          md-mini-fab
+          color="primary"
+          (click)="increase(programming)">+</button>
+      </md-grid-tile>
+    </md-grid-list>
+
+    <md-grid-list cols="4" rowHeight="40px">
+      <md-grid-tile>
+        <span>BJJ</span>
+      </md-grid-tile>
+      <md-grid-tile>
+        <input
+          type="hidden"
+          name="bjj"
+          [(ngModel)]="hero.skills.bjj"
+          #bjj="ngModel"
+          disabled
+        >
+        <button
+          type="button"
+          md-mini-fab
+          color="primary"
+          (click)="decrease(bjj)">-</button>
+        <span class="skill-counter">{{ hero.skills.bjj }}</span>
+        <button
+          type="button"
+          md-mini-fab
+          color="primary"
+          (click)="increase(bjj)">+</button>
+      </md-grid-tile>
+    </md-grid-list>
+
+    <md-grid-list cols="4" rowHeight="40px">
+      <md-grid-tile>
+        <span>FIFA</span>
+      </md-grid-tile>
+      <md-grid-tile>
+        <input
+          type="hidden"
+          name="fifa"
+          [(ngModel)]="hero.skills.fifa"
+          #fifa="ngModel"
+          disabled
+        >
+        <button
+          type="button"
+          md-mini-fab
+          color="primary"
+          (click)="decrease(fifa)">-</button>
+        <span class="skill-counter">{{ hero.skills.fifa }}</span>
+        <button
+          type="button"
+          md-mini-fab
+          color="primary"
+          (click)="increase(fifa)">+</button>
+      </md-grid-tile>
+    </md-grid-list>
   </div>
 
-  <div>
-    <span>Programming</span>
-    <button (click)="decrease(programming)">-</button>
-    <input
-      type="number"
-      name="programming"
-      [(ngModel)]="hero.skills.programming"
-      #programming="ngModel"
-    >
-    <button (click)="increase(programming)">+</button>
-  </div>
-
-  <div>
-    <span>BJJ</span>
-    <button (click)="decrease(bjj)">-</button>
-    <input
-      type="number"
-      name="bjj"
-      [(ngModel)]="hero.skills.bjj"
-      #bjj="ngModel"
-      disabled
-    >
-    <button (click)="increase(bjj)">+</button>
-  </div>
-
-  <div>
-    <span>FIFA</span>
-    <button (click)="decrease(fifa)">-</button>
-    <input
-      type="number"
-      name="fifa"
-      [(ngModel)]="hero.skills.fifa"
-      #fifa="ngModel"
-      disabled
-    >
-    <button (click)="increase(fifa)">+</button>
-  </div>
-
-  <button>Create</button>
+  <button md-raised-button>Create</button>
 </form>
 
-
-{{ hero | json }}
+<pre>
+<code>{{ hero | json }}</code>
+</pre>

@@ -1,0 +1,65 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+body {
+  font-family: Roboto;
+}
+
+app-model-driven,
+app-template-driven {
+  display: block;
+  background: #fdfdfd;
+  padding: 40px;
+}
+
+.mat-checkbox {
+  padding: 0 20px 0 0;
+}
+
+.mat-radio-button {
+  padding: 0 20px 0 0;
+}
+
+.mat-mini-fab {
+  border-radius: 0 !important;
+}
+
+.mat-grid-tile .mat-figure {
+  justify-content: flex-start !important;
+}
+
+.form-group {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.form-group--big {
+  margin-bottom: 30px;
+}
+
+.skill-container {
+  background-color: #fff;
+}
+
+.skill-counter {
+  display: inline-block;
+  padding: 0 20px;
+}
+
+
+h1 {
+  font-size: 15px;
+  padding: 0;
+  margin: 0 0 5px;
+  color: #999;
+  font-weight: normal;
+}
+
+
+
+
+
+
+
+
+
