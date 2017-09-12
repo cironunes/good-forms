@@ -12,12 +12,24 @@ app-template-driven {
   padding: 40px;
 }
 
+.gf-wrapper {
+  margin: 0 auto;
+  max-width: 960px;
+  min-width: 960px;
+}
+
 .mat-checkbox {
   padding: 0 20px 0 0;
 }
 
+.app-label {
+  display: block;
+  margin-bottom: 15px;
+}
+
 .mat-radio-button {
-  padding: 0 20px 0 0;
+  display: block !important;
+  margin: 0 0 20px;
 }
 
 .mat-mini-fab {
@@ -26,6 +38,11 @@ app-template-driven {
 
 .mat-grid-tile .mat-figure {
   justify-content: flex-start !important;
+}
+
+.app-tab-container {
+  padding: 40px;
+
 }
 
 .form-group {
@@ -47,13 +64,13 @@ app-template-driven {
 }
 
 
-h1 {
-  font-size: 15px;
-  padding: 0;
-  margin: 0 0 5px;
-  color: #999;
-  font-weight: normal;
-}
+// h1 {
+//   font-size: 15px;
+//   padding: 0;
+//   margin: 0 0 5px;
+//   color: #999;
+//   font-weight: normal;
+// }
 
 
 

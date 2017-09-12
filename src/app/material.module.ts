@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { NgModule } from '@angular/core';
 import {
   MdRadioModule,
   MdCheckboxModule,
@@ -9,7 +9,9 @@ import {
   MdSelectModule,
   MdGridListModule,
   MdAutocompleteModule,
-  MdTableModule
+  MdTableModule,
+  MdCardModule,
+  MdTabsModule
 } from '@angular/material';
 
 @NgModule({
@@ -23,7 +25,9 @@ import {
     MdSelectModule,
     MdGridListModule,
     MdAutocompleteModule,
-    MdTableModule
+    MdTableModule,
+    MdCardModule,
+    MdTabsModule
   ],
   exports: [
     MdRadioModule,
@@ -35,7 +39,9 @@ import {
     MdSelectModule,
     MdGridListModule,
     MdAutocompleteModule,
-    MdTableModule
+    MdTableModule,
+    MdCardModule,
+    MdTabsModule
   ]
 })
 export class AppMaterialModule {}

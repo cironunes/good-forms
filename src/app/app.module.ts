@@ -6,6 +6,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppMaterialModule } from './material.module';
 import { AppRoutingModule } from './app-routing.module';
+import { SharedModule } from './shared/shared.module';
+
 import { AppComponent } from './app.component';
 import { TemplateDrivenComponent } from './template-driven/template-driven.component';
 import { ModelDrivenComponent } from './model-driven/model-driven.component';
@@ -20,10 +22,9 @@ import { ModelDrivenComponent } from './model-driven/model-driven.component';
     BrowserModule,
     HttpModule,
     BrowserAnimationsModule,
-    AppMaterialModule,
     AppRoutingModule,
-    FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

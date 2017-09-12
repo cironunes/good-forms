@@ -52,9 +52,11 @@ export class ModelDrivenComponent {
 
   heroes = state.heroes;
   skills: FormGroup;
+  name: FormControl;
   github: FormControl;
+  isFirstStepValid: boolean;
   users;
-  points: number = 10;
+  points = 10;
 
   constructor(
     private fb: FormBuilder,
@@ -81,13 +83,20 @@ export class ModelDrivenComponent {
     });
 
     this.skills = (this.heroForm.get('skills') as FormGroup);
+    this.name = (this.heroForm.get('name') as FormControl);
+
+    this.name.valueChanges.subscribe(() => {
+      this.isFirstStepValid = this.name.valid;
+    });
 
     this.skills
       .valueChanges
       .subscribe(skills => {
         let sum = 0;
-        for (let i in skills) {
-          sum += skills[i];
+        for (const i in skills) {
+          if (skills.hasOwnProperty(i)) {
+            sum += skills[i];
+          }
         }
 
         this.points = 10 - sum;
