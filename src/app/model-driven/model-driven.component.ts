@@ -35,6 +35,20 @@ export const superpowersValidator = (control: AbstractControl) => {
   return null;
 };
 
+const skillsValidator = (control: AbstractControl) => {
+  const skills = Object.assign({}, control.value);
+  const fields = [skills.programming, skills.bjj, skills.fifa];
+  const points = fields.reduce((prev, curr) => {
+    return prev + curr;
+  }, 0);
+
+  if (points < 10) {
+    return { allpoints: true };
+  }
+
+  return null;
+};
+
 @Component({
   selector: 'app-model-driven',
   templateUrl: './model-driven.component.html',
@@ -78,12 +92,12 @@ export class ModelDrivenComponent {
         programming: 0,
         bjj: 0,
         fifa: 0
-      }),
+      }, { validator: skillsValidator }),
       github: []
     });
 
-    this.skills = (this.heroForm.get('skills') as FormGroup);
     this.name = (this.heroForm.get('name') as FormControl);
+    this.skills = (this.heroForm.get('skills') as FormGroup);
 
     this.name.valueChanges.subscribe(() => {
       this.isFirstStepValid = this.name.valid;
@@ -114,16 +128,6 @@ export class ModelDrivenComponent {
     return this.http.get(`${GITHUB_API}/search/users`, { search: { q } })
       .map(response => response.json())
       .map(data => data.items);
-  }
-
-  decrease(field) {
-    const theField = this.skills.get(field);
-    this.skills.get(field).patchValue(theField.value - 1);
-  }
-
-  increase(field) {
-    const theField = this.skills.get(field);
-    this.skills.get(field).patchValue(theField.value + 1);
   }
 
   createHero() {

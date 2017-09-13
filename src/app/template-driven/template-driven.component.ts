@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Hero } from "../hero";
+import { Hero } from '../hero';
 
 @Component({
   selector: 'app-template-driven',
@@ -9,7 +9,7 @@ import { Hero } from "../hero";
 export class TemplateDrivenComponent {
 
   hero: Hero;
-  programming;
+  points = 10;
 
   constructor() {
     this.hero = new Hero('', {
@@ -17,16 +17,6 @@ export class TemplateDrivenComponent {
       bjj: 0,
       fifa: 0
     });
-  }
-
-  decrease(field) {
-    const newValue = field.value >= 1 ? field.value - 1 : 0;
-    field.update.emit(newValue);
-  }
-
-  increase(field) {
-    const newValue = field.value <= 9 ? field.value + 1  : 10;
-    field.update.emit(newValue);
   }
 
 }

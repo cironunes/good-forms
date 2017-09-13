@@ -1,70 +1,22 @@
-<h2>Skills <span>{{ points }} points</span></h2>
 <md-grid-list cols="4" rowHeight="40px">
   <md-grid-tile>
-    <span>Programming</span>
+    <span>{{ name }}</span>
   </md-grid-tile>
   <md-grid-tile>
-    <input type="hidden" formControlName="programming">
     <button
       type="button"
       md-mini-fab
       color="primary"
-      (click)="decrease('programming')"
-      [disabled]="points === 10 || heroForm.get('skills').get('programming').value === 0">-</button>
+      (click)="decrement()"
+      [disabled]="groupPoints === 10 || points === 0">-</button>
     <span class="skill-counter">
-      {{ heroForm.get('skills').get('programming').value }}
+      {{ points }}
     </span>
     <button
       type="button"
       md-mini-fab
       color="primary"
-      (click)="increase('programming')"
-      [disabled]="points === 0">+</button>
-  </md-grid-tile>
-</md-grid-list>
-<md-grid-list cols="4" rowHeight="40px">
-  <md-grid-tile>
-    <span>BJJ</span>
-  </md-grid-tile>
-  <md-grid-tile>
-    <input type="hidden" formControlName="bjj">
-    <button
-      type="button"
-      md-mini-fab
-      color="primary"
-      (click)="decrease('bjj')"
-      [disabled]="points === 10 || heroForm.get('skills').get('bjj').value === 0">-</button>
-    <span class="skill-counter">
-      {{ heroForm.get('skills').get('bjj').value }}
-    </span>
-    <button
-      type="button"
-      md-mini-fab
-      color="primary"
-      (click)="increase('bjj')"
-      [disabled]="points === 0">+</button>
-  </md-grid-tile>
-</md-grid-list>
-<md-grid-list cols="4" rowHeight="40px">
-  <md-grid-tile>
-    <span>FIFA</span>
-  </md-grid-tile>
-  <md-grid-tile>
-    <input type="hidden" formControlName="fifa">
-    <button
-      type="button"
-      md-mini-fab
-      color="primary"
-      (click)="decrease('fifa')"
-      [disabled]="points === 10 || heroForm.get('skills').get('fifa').value === 0">-</button>
-    <span class="skill-counter">
-      {{ heroForm.get('skills').get('fifa').value }}
-    </span>
-    <button
-      type="button"
-      md-mini-fab
-      color="primary"
-      (click)="increase('fifa')"
-      [disabled]="points === 0">+</button>
+      (click)="increment()"
+      [disabled]="groupPoints === 0">+</button>
   </md-grid-tile>
 </md-grid-list>
