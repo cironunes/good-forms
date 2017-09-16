@@ -5,8 +5,7 @@
   <md-grid-tile>
     <button
       type="button"
-      md-mini-fab
-      color="primary"
+      class="app-button"
       (click)="decrement()"
       [disabled]="groupPoints === 10 || points === 0">-</button>
     <span class="skill-counter">
@@ -14,8 +13,7 @@
     </span>
     <button
       type="button"
-      md-mini-fab
-      color="primary"
+      class="app-button"
       (click)="increment()"
       [disabled]="groupPoints === 0">+</button>
   </md-grid-tile>

@@ -1,7 +1,7 @@
 <div class="gf-wrapper">
-  <form>
-    <md-card>
-      <md-input-container class="form-group form-group--big">
+  <form #heroForm="ngForm" class="app-form">
+    <md-card class="app-form">
+      <md-input-container class="form-group">
         <input
           mdInput
           type="text"
@@ -11,30 +11,48 @@
           [(ngModel)]="hero.name"
           #name="ngModel"
         >
-        <md-error [hidden]="name.valid">Name is required</md-error>
+        <md-error [hidden]="name.pristine && name.valid">Name is required</md-error>
       </md-input-container>
 
-      <div class="form-group form-group--big">
-        <h1>Skills</h1>
-        {{ points }} points
+      <div class="form-group">
+        <p class="app-label">You have 10 points to distribute between the following skills. <strong>{{ points }} remaning</strong></p>
         <app-distributor
           name="Programming"
           [(ngModel)]="hero.skills.programming"
-          [groupPoints]="points"></app-distributor>
+          [groupPoints]="points"
+          (update)="updatePoints($event)"
+        ></app-distributor>
+
         <app-distributor
           name="BJJ"
           [(ngModel)]="hero.skills.bjj"
-          [groupPoints]="points"></app-distributor>
+          [groupPoints]="points"
+          (update)="updatePoints($event)"
+        ></app-distributor>
+
         <app-distributor
           name="FIFA"
           [(ngModel)]="hero.skills.fifa"
-          [groupPoints]="points"></app-distributor>
+          [groupPoints]="points"
+          (update)="updatePoints($event)"
+        ></app-distributor>
       </div>
     </md-card>
+
+    <div class="app-form-footer">
+      <button
+        class="app-form-next"
+        md-raised-button
+        color="primary"
+        (click)="initializeHero()"
+        [disabled]="heroForm.invalid"
+    >Create</button>
+    </div>
   </form>
 
-  <pre>
-  <code>{{ hero | json }}</code>
-  </pre>
-
+  <md-card>
+    <pre>
+<code>{{ hero | json }}</code>
+    </pre>
+  </md-card>
 </div>

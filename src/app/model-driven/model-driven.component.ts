@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -9,52 +9,23 @@ import {
 } from '@angular/forms';
 import { Http } from '@angular/http';
 
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/distinctUntilChanged';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/map';
-
 import { Hero } from './hero.model';
 import { state } from './hero.service';
 
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/observable/merge';
+
+import { superpowersValidator, skillsValidator } from '../shared/validators';
+
 const GITHUB_API = `https://api.github.com`;
 
-export const superpowersValidator = (control: AbstractControl) => {
-  const invisibility = control.get('invisibility');
-  const fly = control.get('fly');
-  const healing = control.get('healing');
-  const nightVision = control.get('nightVision');
-
-  const fields = [invisibility, fly, healing, nightVision]
-    .filter(field => field.value === true);
-
-  if (fields.length < 2) {
-    return { atleasttwo: true };
-  }
-
-  return null;
-};
-
-const skillsValidator = (control: AbstractControl) => {
-  const skills = Object.assign({}, control.value);
-  const fields = [skills.programming, skills.bjj, skills.fifa];
-  const points = fields.reduce((prev, curr) => {
-    return prev + curr;
-  }, 0);
-
-  if (points < 10) {
-    return { allpoints: true };
-  }
-
-  return null;
-};
 
 @Component({
   selector: 'app-model-driven',
-  templateUrl: './model-driven.component.html',
-  styleUrls: ['./model-driven.component.css']
+  templateUrl: './model-driven.component.html'
 })
-export class ModelDrivenComponent {
+export class ModelDrivenComponent implements OnInit, OnDestroy {
 
   heroForm: FormGroup;
   superpowers = [
@@ -65,12 +36,22 @@ export class ModelDrivenComponent {
   ];
 
   heroes = state.heroes;
-  skills: FormGroup;
+
   name: FormControl;
   github: FormControl;
+  rival: FormControl;
+  superpowersGroup: FormGroup;
+  skills: FormGroup;
+
   isFirstStepValid: boolean;
+  isSecondStepValid: boolean;
   users;
   points = 10;
+  currentStep = 0;
+
+  firstStep$: Subscription;
+  skills$: Subscription;
+  superpowersGroup$: Subscription;
 
   constructor(
     private fb: FormBuilder,
@@ -79,13 +60,13 @@ export class ModelDrivenComponent {
     const defaultHero = this.heroes[0];
 
     this.heroForm = fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      rival: [],
+      name: [null, [Validators.required, Validators.minLength(3)]],
+      rival: [null, [Validators.required]],
       superpowers: fb.group({
-        invisibility: false,
-        fly: false,
-        nightVision: false,
-        healing: false
+        invisibility: null,
+        fly: null,
+        nightVision: null,
+        healing: null
       }, { validator: superpowersValidator }),
       sex: [],
       skills: fb.group({
@@ -93,17 +74,30 @@ export class ModelDrivenComponent {
         bjj: 0,
         fifa: 0
       }, { validator: skillsValidator }),
-      github: []
+      github: [null, [Validators.required, Validators.minLength(3)]]
     });
 
     this.name = (this.heroForm.get('name') as FormControl);
+    this.github = (this.heroForm.get('github') as FormControl);
+    this.rival = (this.heroForm.get('rival') as FormControl);
     this.skills = (this.heroForm.get('skills') as FormGroup);
+    this.superpowersGroup = (this.heroForm.get('superpowers') as FormGroup);
+  }
 
-    this.name.valueChanges.subscribe(() => {
-      this.isFirstStepValid = this.name.valid;
+  ngOnInit() {
+    this.firstStep$ = Observable.merge(
+      this.name.valueChanges,
+      this.github.valueChanges,
+      this.rival.valueChanges
+    ).subscribe(changes => {
+      this.isFirstStepValid = this.name.valid && this.github.valid && this.rival.valid;
     });
 
-    this.skills
+    this.superpowersGroup$ = this.superpowersGroup.valueChanges.subscribe(superpowers => {
+      this.isSecondStepValid = this.superpowersGroup.valid;
+    });
+
+    this.skills$ = this.skills
       .valueChanges
       .subscribe(skills => {
         let sum = 0;
@@ -116,12 +110,18 @@ export class ModelDrivenComponent {
         this.points = 10 - sum;
       });
 
-    this.github = (this.heroForm.get('github') as FormControl);
 
     this.users = this.github.valueChanges
       .debounceTime(400)
       .distinctUntilChanged()
       .switchMap(github => this.searchUsers(github));
+
+  }
+
+  ngOnDestroy() {
+    this.firstStep$.unsubscribe();
+    this.skills$.unsubscribe();
+    this.superpowersGroup$.unsubscribe();
   }
 
   searchUsers(q: string) {
@@ -132,14 +132,25 @@ export class ModelDrivenComponent {
 
   createHero() {
     this.heroes.push(this.heroForm.value);
-    this.heroForm.reset({
-      name: '',
-      skills: {
-        bjj: 0,
-        fifa: 0,
-        programming: 0
-      }
-    });
+    this.currentStep = 0;
+
+    setTimeout(() => {
+      this.heroForm.reset({
+        skills: {
+          programming: 0,
+          bjj: 0,
+          fifa: 0
+        }
+      });
+    }, 300);
+  }
+
+  back() {
+    this.currentStep -= 1;
+  }
+
+  next() {
+    this.currentStep += 1;
   }
 
 }

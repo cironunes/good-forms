@@ -1,8 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
 body {
   font-family: Roboto;
+}
+
+strong {
+  font-weight: bold;
 }
 
 app-model-driven,
@@ -18,40 +22,46 @@ app-template-driven {
   min-width: 960px;
 }
 
-.mat-checkbox {
-  padding: 0 20px 0 0;
+.mat-button.active {
+  background-color: #2e3f9c;
+}
+
+.app-title {
+  padding-right: 10px;
 }
 
 .app-label {
+  font-size: 14px;
+  font-weight: normal;
   display: block;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
+  color: #959595;
 }
 
-.mat-radio-button {
-  display: block !important;
-  margin: 0 0 20px;
+.app-hint {
+  color: #807B3C;
 }
 
-.mat-mini-fab {
-  border-radius: 0 !important;
+.app-form {
+  margin-bottom: 20px;
 }
 
-.mat-grid-tile .mat-figure {
-  justify-content: flex-start !important;
+.app-form-footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.app-form-next {
+  margin-left: auto !important;
 }
 
 .app-tab-container {
   padding: 40px;
-
+  min-height: 420px;
 }
 
 .form-group {
-  display: block;
-  margin-bottom: 20px;
-}
-
-.form-group--big {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .skill-container {
@@ -63,20 +73,68 @@ app-template-driven {
   padding: 0 20px;
 }
 
+.app-button {
+  cursor: pointer;
+  border: 0;
+  background: #ffffff;
+  box-shadow: 0 0 2px 0 rgba(0,0,0,0.12), 0 2px 2px 0 rgba(0,0,0,0.24);
+  width: 26px;
+  height: 30px;
+}
 
-// h1 {
-//   font-size: 15px;
-//   padding: 0;
-//   margin: 0 0 5px;
-//   color: #999;
-//   font-weight: normal;
-// }
+.app-button[disabled] {
+  background: rgba(0,0,0,.12);
+  box-shadow: none;
+}
 
+// override material
+// ------------------------------
+.mat-select-placeholder,
+.mat-select-value-text {
+  font-size: 14px;
+}
 
+.mat-checkbox {
+  padding: 0 20px 0 0;
+}
 
+.mat-select {
+  width: 200px;
+}
 
+.mat-radio-button {
+  display: block !important;
+  margin: 0 0 20px;
+}
 
+.mat-grid-tile {
+  overflow: visible !important;
+}
 
+.mat-grid-tile .mat-figure {
+  justify-content: flex-start !important;
+}
 
+.mat-radio-label-content {
+  font-size: 12px;
+  color: #959595;
+}
 
+.mat-checkbox {
+  display: block;
+  margin: 15px 0;
+  font-size: 13px;
+  color: #959595;
+}
 
+.mat-card.mat-card--no-padding {
+  padding: 0;
+}
+
+.app-form .mat-tab-label {
+  padding: 30px 40px;
+}
+
+.is-valid {
+  color: #417505;
+}

@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, forwardRef } from '@angular/core';
+import { Component, Input, forwardRef, EventEmitter, Output } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'app-distributor',
   templateUrl: './distributor.component.html',
-  styleUrls: ['./distributor.component.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -13,43 +12,35 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     }
   ]
 })
-export class DistributorComponent implements ControlValueAccessor, OnInit {
+export class DistributorComponent implements ControlValueAccessor {
 
   @Input() name: string;
   @Input() groupPoints: number;
+  @Output() update = new EventEmitter();
   points: number;
-
-  constructor() { }
-
-  ngOnInit() {
-    this.points -= 1;
-    this.propagateChange(this.points);
-  }
 
   increment() {
     this.points += 1;
     this.propagateChange(this.points);
+    this.update.emit(this.groupPoints - 1);
   }
 
   decrement() {
     this.points -= 1;
     this.propagateChange(this.points);
+    this.update.emit(this.groupPoints + 1);
   }
-
-  propagateChange = (_: any) => {};
 
   writeValue(value: number): void {
     if (value !== undefined) {
       this.points = value;
     }
   }
-
   registerOnChange(fn: any): void {
     this.propagateChange = fn;
   }
-
-  registerOnTouched(fn: any): void { }
-
-  setDisabledState?(isDisabled: boolean): void { }
+  propagateChange = (_: any) => {};
+  registerOnTouched(fn: any): void {}
+  setDisabledState?(isDisabled: boolean): void {}
 
 }

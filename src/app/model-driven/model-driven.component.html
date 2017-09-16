@@ -1,13 +1,16 @@
 <div class="gf-wrapper">
-  <form [formGroup]="heroForm" (submit)="createHero()" class="form-group form-group--big">
-    <md-card>
-      <md-tab-group>
-        <md-tab label="1. Personal info">
+  <form [formGroup]="heroForm" (submit)="createHero()" class="form-group">
+    <md-card class="app-form mat-card--no-padding">
+      <md-tab-group [(selectedIndex)]="currentStep">
+        <md-tab>
+          <ng-template md-tab-label>
+            <span [ngClass]="{'is-valid': isFirstStepValid}">1. Personal info</span>
+         </ng-template>
           <div class="app-tab-container">
-            <md-input-container class="form-group form-group--big">
+            <md-input-container class="form-group">
               <input mdInput placeholder="Name *" formControlName="name">
               <md-error
-                *ngIf="heroForm.get('name').touched && heroForm.get('name').pristine &&
+                *ngIf="heroForm.get('name').pristine &&
                 heroForm.get('name').hasError('required')"
               >
                 Name is <strong>required</strong>
@@ -20,20 +23,26 @@
               </md-error>
             </md-input-container>
 
-            <div class="form-group form-group--big">
+            <div class="form-group">
               <span class="app-label">Sex</span>
               <md-radio-group formControlName="sex">
-                <md-radio-button value="Male">
+                <md-radio-button value="Male" color="primary">
                   Male
                 </md-radio-button>
-                <md-radio-button value="Female">
+                <md-radio-button value="Female" color="primary">
                   Female
                 </md-radio-button>
               </md-radio-group>
             </div>
 
-            <md-input-container>
-              <input type="text" mdInput placeholder="Github" formControlName="github" [mdAutocomplete]="auto">
+            <md-input-container class="form-group">
+              <input type="text" mdInput placeholder="GitHub" formControlName="github" [mdAutocomplete]="auto">
+              <md-error
+                *ngIf="heroForm.get('github').touched && heroForm.get('github').pristine &&
+                heroForm.get('github').hasError('required')"
+              >
+                GitHub is <strong>required</strong>
+              </md-error>
             </md-input-container>
             <md-autocomplete #auto="mdAutocomplete">
               <md-option *ngFor="let user of users | async" [value]="user.login">
@@ -42,10 +51,10 @@
               </md-option>
             </md-autocomplete>
 
-            <div class="form-group form-group--big">
+            <div class="form-group">
               <md-select placeholder="Rival" formControlName="rival">
-                <md-option value="Mr. Catchup">Mr. Catchup</md-option>
-                <md-option value="PHP">PHP</md-option>
+                <md-option value="Lazyness">Lazyness</md-option>
+                <md-option value="Singer">Singer</md-option>
                 <md-option value="Chocholate">Chocolate</md-option>
               </md-select>
             </div>
@@ -53,14 +62,17 @@
         </md-tab>
 
         <md-tab label="2. Superpowers" [disabled]="!isFirstStepValid">
+          <ng-template md-tab-label>
+            <span [ngClass]="{'is-valid': isSecondStepValid}">2. Superpowers</span>
+          </ng-template>
           <div class="app-tab-container">
-            <div class="form-group form-group--big">
-              <span class="app-label">Superpowers *</span>
+            <div class="form-group">
+              <p class="app-label">Select at least two superpowers</p>
               <div formGroupName="superpowers">  
-                <md-checkbox class="app-checkbox" [formControlName]="power.id" *ngFor="let power of superpowers">
+                <md-checkbox class="app-checkbox" [formControlName]="power.id" *ngFor="let power of superpowers" color="primary">
                   {{ power.name }}
                 </md-checkbox>
-                <md-error *ngIf="!heroForm.get('superpowers').pristine && heroForm.get('superpowers').hasError('atleasttwo')">
+                <md-error class="app-hint" *ngIf="!heroForm.get('superpowers').pristine && heroForm.get('superpowers').hasError('atleasttwo')">
                   The hero should have at least two powers
                 </md-error>
               </div>    
@@ -68,24 +80,61 @@
           </div>
         </md-tab>
 
-        <md-tab label="3. Skills">
+        <md-tab label="3. Skills" [disabled]="!isFirstStepValid || !isSecondStepValid">
           <div class="app-tab-container">
-            <div class="form-group form-group--big" formGroupName="skills">
-              <h2>Skills <span>{{ points }} points</span></h2>
-              <app-distributor name="Programming" [groupPoints]="points" formControlName="programming"></app-distributor>
+            <div class="form-group" formGroupName="skills">
+              <p class="app-label">You have 10 points to distribute between the following skills. <strong>{{ points }} remaning</strong></p>
+              <app-distributor
+                name="Programming"
+                formControlName="programming"
+                [groupPoints]="points"
+              ></app-distributor>
               <app-distributor name="Fifa" [groupPoints]="points" formControlName="fifa"></app-distributor>
               <app-distributor name="BJJ" [groupPoints]="points" formControlName="bjj"></app-distributor>
+              <md-error class="app-hint" *ngIf="!heroForm.get('skills').pristine && heroForm.get('skills').hasError('allpoints')">
+                You must distribute all skill points.
+              </md-error>
             </div>
           </div>
         </md-tab>
       </md-tab-group>
     </md-card>
 
-    {{ name.valid }}
-    <button md-raised-button [disabled]="heroForm.invalid">Create</button>
+    <div class="app-form-footer">
+      <button
+        type="button"
+        md-button
+        (click)="back()"
+        *ngIf="currentStep !== 0"
+      >Back</button>
+
+      <button
+        type="reset"
+        md-raised-button
+        color="primary"
+        (click)="createHero()"
+        *ngIf="heroForm.valid && currentStep === 2"
+      >Create</button>
+
+      <button
+        type="button"
+        md-raised-button
+        color="accent"
+        class="app-form-next"
+        [disabled]="!isFirstStepValid || currentStep > 0 && !isSecondStepValid"
+        (click)="next()"
+        *ngIf="currentStep < 2"
+      >Next</button>
+    </div>
   </form>
 
-  <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+  <md-card>
+    <pre>
+<code>{{ heroForm.value | json }}</code>
+    </pre>
+  </md-card>
+
+  <!-- <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
     <thead>
       <tr>
         <th>Name</th>
@@ -119,5 +168,5 @@
         </td>
       </tr>
     </tbody>
-  </table>   
+  </table>    -->
 </div>
